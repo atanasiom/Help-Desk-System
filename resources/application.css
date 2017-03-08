@@ -1,0 +1,99 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.root, #toolbar-menu, #item-restore, #item-minimize, #item-maximize, #item-exit, #list-scrollbar, #row {
+    -fx-background-color: WhiteSmoke;
+}
+
+#exit-button, #windowed-button, #minimize-button {
+    -fx-background-radius: 5.0em;
+    -fx-max-height: 15.0px;
+    -fx-min-height: 15.0px;
+    -fx-max-width: 15.0px;
+    -fx-min-width: 15.0px;
+}
+
+#exit-button {
+    -fx-background-color: Red;
+}
+
+#exit-button:pressed {
+    -fx-background-color: DarkRed;
+}
+
+#windowed-button {
+    -fx-background-color: Yellow;
+}
+
+#windowed-button:pressed {
+    -fx-background-color: #8B8B00;
+}
+
+#minimize-button {
+    -fx-background-color: Green;
+}
+
+#minimize-button:pressed {
+    -fx-background-color: DarkGreen;
+}
+
+#title-text {
+    -fx-font-size: 1.5em;
+}
+
+#main-toolbar {
+    -fx-background-color: LightGrey;
+    -fx-max-height: 30.0px;
+    -fx-min-height: 30.0px;
+}
+
+#item-restore .label, #item-restore:hover .label {
+    -fx-text-fill: #BBBBBB;
+}
+
+#item-restore:hover {
+    -fx-background-color: #E6E6E6;
+}
+
+#item-restore .label, #item-restore:hover .label, #item-minimize .label, #item-minimize:hover .label, #item-maximize .label, #item-maximize:hover .label, #item-exit .label, #item-exit:hover .label {
+    -fx-text-fill: Black;
+}
+
+#item-restore:hover, #item-minimize:hover, #item-maximize:hover, #item-exit:hover {
+    -fx-text-fill: Black;
+    -fx-background-color: LightSkyBlue;
+}
+
+#main-bar {
+    -fx-background-color: WhiteSmoke
+}
+
+#main-bar .thumb {
+    -fx-background-color: LightGrey;
+}
+
+#ticket-status {
+    -fx-background-color: WhiteSmoke;
+}
+
+#ticket-status:hover {
+    -fx-background-color: LightSkyBlue;
+}
+
+#add-stack {
+    -fx-background-color: WhiteSmoke;
+}
+
+#label-create-ticket {
+    -fx-alignment: center;
+    -fx-font-size: 2em;
+}
+
+#column-pane {
+    -fx-background-color: DarkGrey;
+    -fx-font-size: 1.5em;
+}
+
+#column-pane .label {
+    -fx-text-fill: White;
+    -fx-font-weight: bold;
+}
