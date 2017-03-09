@@ -22,7 +22,7 @@ public class RequestIO {
             String[] data = s.nextLine().split(",");
             Date requested = RequestIO.DATE_FORMATTER.parse(data[0]);
             Date closed = data[1].equals(" ") ? null : RequestIO.DATE_FORMATTER.parse(data[1]);
-            list.add(new ServiceRequest(requested, closed, data[2], data[3]));
+            list.add(new ServiceRequest(requested, closed, data[2], data[4], data[3]));
         }
         s.close();
         return list;

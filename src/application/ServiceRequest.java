@@ -10,6 +10,7 @@ public class ServiceRequest {
     private Date dateRequested;
     private Date dateCompleted;
     private String description;
+    private String notes;
     private String technician;
 
     /**
@@ -28,6 +29,15 @@ public class ServiceRequest {
         this.description = desc;
         this.technician = tech;
     }
+
+    public ServiceRequest(Date requested, Date completed, String desc, String tech, String notes) {
+        this.dateRequested = requested;
+        this.dateCompleted = completed;
+        this.description = desc;
+        this.technician = tech;
+        this.notes = notes;
+    }
+
 
     public Date getDateRequested() {
         return dateRequested;
@@ -53,6 +63,14 @@ public class ServiceRequest {
         this.description = description;
     }
 
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
     public String getTechnician() {
         return technician;
     }
@@ -71,6 +89,8 @@ public class ServiceRequest {
         sb.append(this.getDescription());
         sb.append(",");
         sb.append(this.technician);
+        sb.append(",");
+        sb.append(this.notes);
         return sb.toString();
     }
 
