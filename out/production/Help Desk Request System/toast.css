@@ -1,9 +1,0 @@
-.root {
-    -fx-background-color: LightGreen;
-    -fx-background-radius: 10px;
-    -fx-padding: 50px;
-}
-
-.label {
-    -fx-font-size: 2em;
-}
