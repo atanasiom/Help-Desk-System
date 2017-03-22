@@ -7,8 +7,6 @@ import javafx.scene.layout.GridPane;
 
 public class TicketPane extends GridPane {
 
-	private ServiceRequest request;
-
 	private Label createdLabel = new Label();
 	private Label closedLabel = new Label();
 	private Label descLabel = new Label();
@@ -18,7 +16,6 @@ public class TicketPane extends GridPane {
 	public TicketPane(ServiceRequest request, int idNumber) {
 		super();
 
-		this.request = request;
 		this.statusBox = new StatusBox(request, idNumber);
 
 		createdLabel.setText(RequestIO.DATE_FORMATTER.format(request.getDateRequested()));

@@ -289,8 +289,8 @@ public class HelpDeskSystem extends Application {
 	}
 
 	private void createTicketStack() {
-		addTicketPane.setMaxHeight(50);
-		addTicketPane.setMinHeight(50);
+		addTicketPane.setMaxHeight(40);
+		addTicketPane.setMinHeight(40);
 		addTicketPane.getChildren().add(createTicketLabel);
 		addTicketPane.setAlignment(Pos.TOP_CENTER);
 		addTicketPane.setPadding(new Insets(0, 10, 0, 10));
