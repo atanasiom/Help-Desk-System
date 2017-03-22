@@ -84,6 +84,13 @@ public class HelpDeskSystem extends Application {
 		this.finishUp();
 	}
 
+	/**
+	 * Creates the list of tickets from the array of ServiceRequests. If {@code newRow} is {@code true}, the list will
+	 * recreate itself and the very first list item will flash green, indicating it is a newly created row
+	 *
+	 * @param itemList list of ServiceRequests to create the list from
+	 * @param newRow   {@code true} if you are adding a new row to the list
+	 */
 	private void createList(ArrayList<ServiceRequest> itemList, boolean newRow) {
 		int idx = 0;
 		mainList.getChildren().clear();
@@ -123,12 +130,21 @@ public class HelpDeskSystem extends Application {
 
 	}
 
+	/**
+	 * Method to add a new row to the main list. This method really only serves to make the code clearer.
+	 *
+	 * @param request the new ServiceRequest being added to the list
+	 */
 	private void addRow(ServiceRequest request) {
 		masterList.add(0, request);
 		this.createList(masterList, true);
 	}
 
 
+	/**
+	 * Sets the Id's of all the objects so that the .css file can properly apply styling. This method serves to
+	 * clean up the main start method.
+	 */
 	private void setIds() {
 		addTicketPane.setId("add-stack");
 		buttonExit.setId("exit-button");
@@ -208,6 +224,12 @@ public class HelpDeskSystem extends Application {
 		this.createMainToolBarContextMenu();
 	}
 
+	/**
+	 * Creates the context menu for the top toolbar. Allows user to close, maximize, minimize, and restore the window.
+	 * Only shows up when right clicking
+	 *
+	 * @throws IOException if the image resources are not found
+	 */
 	private void createMainToolBarContextMenu() throws IOException {
 		itemRestore.setGraphic(new IconView("restore.png"));
 		itemRestore.setDisable(true);
