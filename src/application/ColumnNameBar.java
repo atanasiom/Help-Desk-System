@@ -1,14 +1,15 @@
 package application;
 
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
+import javafx.geometry.Pos;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 
 /**
  * This is the bar that goes across the top with the column names and the buttons to let the user sort the list of items
  */
-public class ColumnNameBar extends HBox {
+public class ColumnNameBar extends GridPane {
 
 	private String[] columnNames;
 
@@ -25,12 +26,15 @@ public class ColumnNameBar extends HBox {
 		super();
 
 		this.columnNames = columnNames;
-		for (String name : columnNames) {
-			ColumnHeader header = new ColumnHeader(name);
-			header.setMaxWidth(HelpDeskSystem.WIDTH / columnNames.length);
-			HBox.setHgrow(header, Priority.ALWAYS);
-			this.getChildren().add(header);
+		for (int idx = 0; idx < columnNames.length; idx++) {
+			ColumnHeader header = new ColumnHeader(columnNames[idx]);
+			ColumnConstraints colConst = new ColumnConstraints();
+			colConst.setPercentWidth(100 / columnNames.length);
+			this.add(header, idx, 0);
+			this.getColumnConstraints().add(colConst);
+			this.setAlignment(Pos.CENTER);
 		}
+		this.setMinHeight(40);
 	}
 
 }
