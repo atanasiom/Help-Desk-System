@@ -36,14 +36,7 @@ public class ServiceRequest {
 	}
 
 	public ServiceRequest(Date requested, Date completed, String desc, String tech, String notes) {
-		this.dateRequested = requested;
-		this.dateCompleted = completed;
-		if (dateCompleted == null)
-			this.status = ServiceStatus.OPEN;
-		else
-			this.status = ServiceStatus.CLOSED;
-		this.description = desc;
-		this.technician = tech;
+		this(requested, completed, desc, tech);
 		this.notes = notes;
 	}
 
