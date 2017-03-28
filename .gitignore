@@ -1,0 +1,5 @@
+.idea/
+out/production/
+/out/artifacts/JavaFXApp/JavaFXApp.html
+/out/artifacts/JavaFXApp/JavaFXApp.jnlp
+.DS_Store
