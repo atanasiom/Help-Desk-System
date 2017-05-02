@@ -26,6 +26,7 @@ public class ColumnNameBar extends GridPane {
 		super();
 
 		this.columnNames = columnNames;
+		//Evenly spaces out the column names
 		for (int idx = 0; idx < columnNames.length; idx++) {
 			ColumnHeader header = new ColumnHeader(columnNames[idx]);
 			ColumnConstraints colConst = new ColumnConstraints();

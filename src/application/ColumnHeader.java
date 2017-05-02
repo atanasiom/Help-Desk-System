@@ -7,6 +7,9 @@ import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 
+/**
+ * Used only to create the headers for the columns
+ */
 public class ColumnHeader extends HBox {
 
 	private Label columnNameLabel;

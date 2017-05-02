@@ -97,3 +97,20 @@
     -fx-text-fill: White;
     -fx-font-weight: bold;
 }
+
+#description-area {
+    -fx-max-height: 100px;
+    -fx-max-width: 400px;
+}
+
+#save-ticket-pane {
+    -fx-padding: 10 0 0 0;
+}
+
+#save-ticket-label {
+    -fx-background-color: PaleGreen;
+    -fx-font-size: 1.5em;
+    -fx-min-width: 250px;
+    -fx-alignment: center;
+    -fx-background-radius: 15px;
+}

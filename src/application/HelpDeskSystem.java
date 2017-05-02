@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,9 +33,10 @@ public class HelpDeskSystem extends Application {
 	private Stage primaryStage;
 
 	private BorderPane root = new BorderPane();
+	private BorderPane createTicketLabelPane = new BorderPane();
 	private ContextMenu toolbarMenu = new ContextMenu();
 	private IconView iconImage;
-	private Label createTicketLabel = new Label("Create new ticket");
+	private Label createTicketLabel = new Label("Create New Ticket");
 	private MenuItem itemRestore = new MenuItem("Restore");
 	private MenuItem itemMinimize = new MenuItem("Minimize");
 	private MenuItem itemMaximize = new MenuItem("Maximize");
@@ -46,6 +48,7 @@ public class HelpDeskSystem extends Application {
 	private ScrollBar mainScrollBar = new ScrollBar();
 	private Text textNoItems = new Text("No Help Requests Found!");
 	private Text textTitle = new Text("Ticket System");
+	private TextArea areaDescription = new TextArea();
 	private ToolBar toolbarMain = new ToolBar();
 	private VBox addTicketPane = new VBox();
 	private VBox mainList = new VBox();
@@ -60,8 +63,9 @@ public class HelpDeskSystem extends Application {
 		this.primaryStage = primaryStage;
 		primaryStage.initStyle(StageStyle.UNDECORATED);
 
-		masterList = RequestIO.parseList(ClassLoader.getSystemResourceAsStream("tickets.csv"));
+		masterList = RequestIO.parseList(new File("tickets.csv"));
 
+		//Creates the views on the stage
 		this.setIds();
 		this.setMainButtons();
 		this.setStageListeners();
@@ -76,6 +80,7 @@ public class HelpDeskSystem extends Application {
 		Scene scene = new Scene(root, WIDTH, HEIGHT);
 		scene.getStylesheets().addAll(ClassLoader.getSystemResource("application.css").toExternalForm());
 
+		//Creates and shows the stage
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(true);
 		primaryStage.getIcons().add(new Image(ClassLoader.getSystemResourceAsStream("icon.png")));
@@ -102,6 +107,7 @@ public class HelpDeskSystem extends Application {
 
 			ListRow listRow = new ListRow(item, idx);
 
+			//When a user clicks a row, the row will expand.
 			listRow.setOnMouseClicked(e -> {
 				if (e.getButton() == MouseButton.PRIMARY) {
 					boolean clickedDesc = "desc-pane".equals(e.getPickResult().getIntersectedNode().getId());
@@ -119,6 +125,7 @@ public class HelpDeskSystem extends Application {
 			idx++;
 		}
 
+		//Only used when the user is creating a new ticket. It makes the row turn green then fade to grey
 		if (newRow) {
 			TicketPane temp = (TicketPane) ((ListRow) mainList.getChildren().get(0)).getChildren().get(0);
 			temp.setStyle("-fx-background-color: LightGreen;");
@@ -135,9 +142,11 @@ public class HelpDeskSystem extends Application {
 	 *
 	 * @param request the new ServiceRequest being added to the list
 	 */
-	private void addRow(ServiceRequest request) {
+	private void addRow(ServiceRequest request) throws IOException {
 		masterList.add(0, request);
 		this.createList(masterList, true);
+		//Saves the list back to the CSV
+		RequestIO.saveList(masterList, new File("tickets.csv"));
 	}
 
 
@@ -147,6 +156,7 @@ public class HelpDeskSystem extends Application {
 	 */
 	private void setIds() {
 		addTicketPane.setId("add-stack");
+		areaDescription.setId("description-area");
 		buttonExit.setId("exit-button");
 		buttonWindowed.setId("windowed-button");
 		buttonMinimize.setId("minimize-button");
@@ -162,6 +172,10 @@ public class HelpDeskSystem extends Application {
 		toolbarMenu.setId("toolbar-menu");
 	}
 
+
+	/**
+	 * This is the method for the three buttons at the top: close, minimize, and restore
+	 */
 	private void setMainButtons() {
 		buttonExit.setOnMouseClicked(e -> closeApplication());
 
@@ -170,13 +184,19 @@ public class HelpDeskSystem extends Application {
 		buttonMinimize.setOnMouseClicked(e -> this.primaryStage.setIconified(true));
 	}
 
+	/**
+	 * Used for basic stage listening. This method is mostly for cleaning up the code
+	 */
 	private void setStageListeners() {
+
+		//For some reason I need this method, or else when the program is unminimized, nothing happens
 		this.primaryStage.iconifiedProperty().addListener((e, t1, iconified) -> {
 			if (!iconified) {
 				root.setBottom(new Text());
 			}
 		});
 
+		//Set so that the user can't maximize an already maximized stage, or cant restore an already restored stage
 		this.primaryStage.maximizedProperty().addListener((e, t1, maximized) -> {
 			if (maximized) {
 				itemRestore.setDisable(false);
@@ -188,11 +208,18 @@ public class HelpDeskSystem extends Application {
 		});
 	}
 
+	/**
+	 * This method creates the main toolbar with the logo and main buttons
+	 *
+	 * @throws IOException
+	 */
 	private void createMainToolBar() throws IOException {
 		HBox.setHgrow(titleSpacer, Priority.ALWAYS);
 
+		//Logo
 		iconImage = new IconView("icon-small.png");
 
+		//Adds the main buttons
 		toolbarMain.getItems().addAll(buttonExit, buttonWindowed, buttonMinimize, titleSpacer, textTitle, iconImage);
 		toolbarMain.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
 
@@ -203,11 +230,13 @@ public class HelpDeskSystem extends Application {
 			}
 		});
 
+		//Maximize on double click
 		toolbarMain.setOnMouseClicked(event -> {
 			if (event.getClickCount() == 2)
 				this.primaryStage.setMaximized(!this.primaryStage.isMaximized());
 		});
 
+		//Allows the stage to be moved when the user clicks and holds the bar
 		toolbarMain.setOnMouseDragged(event -> {
 			if (event.isPrimaryButtonDown()) {
 				if (this.primaryStage.isMaximized())
@@ -262,6 +291,8 @@ public class HelpDeskSystem extends Application {
 		mainScrollBar.setBlockIncrement(20);
 		mainScrollBar.setVisibleAmount(mainList.getHeight() / masterList.size());
 
+		//Stupid math I have to use since I'm not using a scrollpane. I need this for proper scrolling also since I
+		// have expanding rows.
 		mainList.setOnScroll(e -> {
 			double delta = e.getDeltaY() > 1 ? 40 : -40;
 			double trans = mainList.getTranslateY() + delta;
@@ -278,6 +309,7 @@ public class HelpDeskSystem extends Application {
 			}
 		});
 
+		//Resizes the scrollbar when maximizing
 		topBarBox.heightProperty().addListener(e -> {
 			mainScrollBar.setMaxHeight(visibleListHeight - 11);
 			mainScrollBar.setMax(mainList.getHeight() - visibleListHeight);
@@ -288,44 +320,83 @@ public class HelpDeskSystem extends Application {
 				()));
 	}
 
+	/**
+	 * This method creates the panel that appears when you create a new ticket
+	 */
 	private void createTicketStack() {
+
 		addTicketPane.setMaxHeight(40);
 		addTicketPane.setMinHeight(40);
-		addTicketPane.getChildren().add(createTicketLabel);
 		addTicketPane.setAlignment(Pos.TOP_CENTER);
 		addTicketPane.setPadding(new Insets(0, 10, 0, 10));
+		createTicketLabelPane.setCenter(createTicketLabel);
+		addTicketPane.getChildren().add(createTicketLabelPane);
 
+		//This is where the user is able to write the description
 		GridPane gp = new GridPane();
 		ColumnConstraints colConstraint = new ColumnConstraints();
-		colConstraint.setPercentWidth(100 / 3);
+		colConstraint.setPercentWidth(100 / 2);
 		gp.add(new Label("Date Created:   " + RequestIO.DATE_FORMATTER.format(new Date())), 0, 0);
-		gp.add(new Label("Technician"), 1, 0);
-		gp.add(new Label("Description"), 2, 0);
-		gp.add(new TextArea(), 2, 1);
-		gp.getColumnConstraints().addAll(colConstraint, colConstraint, colConstraint);
+		gp.add(new Label("Description:"), 1, 0);
+		gp.add(areaDescription, 1, 1);
+		gp.getColumnConstraints().addAll(colConstraint, colConstraint);
 
+		//Starts off invisible and only appears when the user wishes to create a new ticket
 		gp.setVisible(false);
 
-		addTicketPane.setOnMouseClicked(e -> {
+		BorderPane saveTicket = new BorderPane();
+		Label labelSaveTicket = new Label("Save Ticket");
+		saveTicket.setCenter(labelSaveTicket);
+
+		saveTicket.setId("save-ticket-pane");
+		labelSaveTicket.setId("save-ticket-label");
+
+		//When the user clicks the label, it expands so that the user can start typing
+		labelSaveTicket.setOnMouseClicked(e -> {
+			SimpleAnimation closeAddPaneAnimation = new SimpleAnimation(addTicketPane.minHeightProperty(), 100, 40);
+			closeAddPaneAnimation.setOnFinished(ae -> {
+				gp.setVisible(false);
+				saveTicket.setVisible(false);
+			});
+			closeAddPaneAnimation.play();
+
+			String desc = areaDescription.getText().trim();
+
+			//Creates the new ticket from what is typed.
+			ServiceRequest req = new ServiceRequest(new Date(), null, desc.length() != 0 ? desc : "No description",
+					"Unassigned");
+			try {
+				this.addRow(req);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		});
+
+		saveTicket.setVisible(false);
+
+		boolean isAddTicketOpen = false;
+
+		//Closes the pane
+		createTicketLabelPane.setOnMouseClicked(e -> {
 			SimpleAnimation openAddPaneAnimation = new SimpleAnimation(addTicketPane.minHeightProperty(), 100, 200);
-			//openAddPaneAnimation.setOnFinished(ae -> gp.setVisible(true));
 			openAddPaneAnimation.play();
 			gp.setVisible(true);
-			//ServiceRequest req = new ServiceRequest(new Date(), null, "New", "Nue");
-			//this.addRow(req);
-			Toast.makeText(primaryStage, "New Ticket Created!", 2000, 250, 500);
+			saveTicket.setVisible(true);
 		});
 
 
-		addTicketPane.getChildren().add(gp);
+		addTicketPane.getChildren().addAll(gp, saveTicket);
 
 		topBarBox.getChildren().add(addTicketPane);
 	}
 
+	/**
+	 * Creates the column names on for the list
+	 * @throws IOException
+	 */
 	private void createColumnNames() throws IOException {
 
-		ColumnNameBar pane = new ColumnNameBar("Date Created", "Status", "Date Completed", "Description",
-				"Technician");
+		ColumnNameBar pane = new ColumnNameBar("Date Created", "Status", "Date Completed", "Description", "Technician");
 
 		pane.setId("column-pane");
 
@@ -347,10 +418,13 @@ public class HelpDeskSystem extends Application {
 
 		topBarBox.heightProperty().addListener(e -> visibleListHeight = HEIGHT - topBarBox.getHeight());
 
+		//Helps adjust scrollbar height. Must be done after the stage is shown becuase the height isn't set until then.
 		mainList.heightProperty().addListener(e -> {
 			mainScrollBar.setMax(mainList.getHeight() - visibleListHeight);
 			mainScrollBar.setVisibleAmount(mainList.getHeight() / masterList.size());
 		});
+
+		System.out.println(primaryStage.getWidth());
 	}
 
 	/**

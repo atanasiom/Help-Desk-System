@@ -32,6 +32,7 @@ public class ServiceRequest {
 		else
 			this.status = ServiceStatus.CLOSED;
 		this.description = desc;
+		this.notes = " ";
 		this.technician = tech;
 	}
 

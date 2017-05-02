@@ -1,4 +1,6 @@
-dateRequested,dateCompleted,description,technician
+dateRequested,dateCompleted,description,notes,technician
+05/02/2017 02:38 PM, ,NEW TEST, ,Unassigned
+05/02/2017 02:38 PM, ,TEST, ,Unassigned
 02/23/2017 11:38 PM, ,Everything is broken!,I have notes!,Mikey
 02/22/2017 11:39 PM, ,This text is far too long to be displayed all at once, ,Frida
 02/21/2017 11:40 PM,02/23/2017 11:38 PM,Hockey, ,Joe

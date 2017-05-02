@@ -10,6 +10,14 @@ public class ServiceRequestComparator implements Comparator<ServiceRequest> {
 		this.type = type;
 	}
 
+	/**
+	 * Compares two ServiceRequests based on the SortType
+	 *
+	 * @param req1 first Request to compare
+	 * @param req2 second Request to compare
+	 *
+	 * @return
+	 */
 	@Override
 	public int compare(ServiceRequest req1, ServiceRequest req2) {
 		switch (type) {
